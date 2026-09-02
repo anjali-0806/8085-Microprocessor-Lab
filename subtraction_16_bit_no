@@ -1,0 +1,28 @@
+; 16-bit subtraction
+; First number  : 3001:3000
+; Second number : 3003:3002
+; Result        : 3005:3004
+
+LDA 3000
+MOV L,A
+
+LDA 3001
+MOV H,A
+
+LDA 3002
+MOV E,A
+
+LDA 3003
+MOV D,A
+
+; Subtract lower bytes
+MOV A,L
+SUB E
+STA 3004
+
+; Subtract higher bytes with borrow
+MOV A,H
+SBB D
+STA 3005
+
+HLT
