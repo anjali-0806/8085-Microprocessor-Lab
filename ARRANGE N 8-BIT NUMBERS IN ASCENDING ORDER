@@ -1,0 +1,39 @@
+; PROGRAM: ARRANGE N 8-BIT NUMBERS IN ASCENDING ORDER
+; INPUT:   2200H = NUMBER OF ELEMENTS
+;          2201H ONWARDS = NUMBERS
+; OUTPUT:  2200H ONWARDS = SORTED NUMBERS
+
+        ORG 2000H
+
+        XRA A           ; CLEAR ACCUMULATOR
+        MOV B,A         ; CLEAR REGISTER B
+        MOV C,A         ; CLEAR REGISTER C
+
+        LXI H,2200H     ; HL POINTS TO 2200H
+
+START:  MOV B,M         ; LOAD COUNT INTO B
+        INX H           ; POINT TO FIRST NUMBER
+        DCR B           ; DECREMENT COUNT
+
+UP:     MOV A,M         ; LOAD CURRENT NUMBER
+        INX H           ; POINT TO NEXT NUMBER
+        CMP M           ; COMPARE CURRENT WITH NEXT NUMBER
+        JC DOWN          ; IF A < M, NO SWAP
+
+        MOV D,M         ; STORE NEXT NUMBER IN D
+        MOV M,A         ; STORE LARGER NUMBER
+        DCX H           ; GO BACK TO PREVIOUS LOCATION
+        MOV M,D         ; STORE SMALLER NUMBER
+        INX H           ; MOVE TO NEXT LOCATION
+        INR C           ; INCREMENT SWAP COUNT
+
+DOWN:   DCR B           ; DECREMENT COUNT
+        JNZ UP          ; REPEAT COMPARISON
+
+        MOV A,C         ; LOAD SWAP COUNT
+        CPI 00H         ; CHECK IF ANY SWAP OCCURRED
+        JNZ START       ; IF YES, REPEAT SORTING
+
+        RST 5           ; DISPLAY/TERMINATE
+
+        END
