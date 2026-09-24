@@ -1,0 +1,29 @@
+; PROGRAM-21
+; Arranging 8-bit numbers in Descending Order
+; Array size  -> 2200H
+; Array data  -> 2201H onwards
+
+START:  XRA A        ; Clear accumulator
+        MOV B,A       ; Clear Register B
+        MOV C,A       ; Clear Register C
+
+        LXI H,2200H   ; Set memory pointer
+        MOV B,M       ; Load array size
+        INX H
+        DCR B         ; Number of comparisons = N-1
+
+UP:     MOV A,M       ; Load first number
+        INX H
+        CMP M         ; Compare with next number
+        JNC 2015H     ; If A >= M, no swap
+
+        MOV D,M       ; Store next number in D
+        MOV M,A       ; Store A at next location
+        DCX H         ; Go back to first location
+        MOV M,D       ; Store smaller number in first location
+
+2015:   INX H
+        DCR B
+        JNZ UP
+
+        HLT            ; Stop
